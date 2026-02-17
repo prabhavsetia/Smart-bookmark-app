@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Smart Bookmark App
 
-## Getting Started
+A private, real-time bookmark manager built with Next.js, Supabase, and Tailwind CSS.
 
-First, run the development server:
+## 🚀 Live Demo
+[Insert your Vercel URL here after deployment]
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Features
+- **Google OAuth Only**: Simple and secure login using Google.
+- **Private Bookmarks**: Each user only sees their own bookmarks, protected by Row Level Security (RLS).
+- **Real-time Updates**: Bookmark list updates instantly across multiple tabs/sessions without page refreshes.
+- **Responsive Design**: Clean, modern UI built with Tailwind CSS and Lucide icons.
+- **CRUD Operations**: Add and delete bookmarks with a single click.
+
+## 🛠 Tech Stack
+- **Framework**: [Next.js 15+](https://nextjs.org/) (App Router)
+- **Authentication**: [Supabase Auth](https://supabase.com/auth) (Google OAuth)
+- **Database**: [Supabase PostgreSQL](https://supabase.com/database)
+- **Real-time**: [Supabase Realtime](https://supabase.com/realtime)
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+
+## 🛠 Setup Instructions
+
+### 1. Supabase Project Configuration
+- Create a new project on [Supabase](https://supabase.com/).
+- Navigate to the **SQL Editor** and run the contents of the `SUPABASE_SETUP.sql` file provided in this repository. This will:
+  - Create the `bookmarks` table.
+  - Enable Row Level Security (RLS).
+  - Set up access policies for users.
+  - Enable Realtime for the table.
+- Go to **Authentication > Providers** and enable **Google**. 
+  - Add your Google Client ID and Secret.
+  - Set the Redirect URL to: `http://localhost:3000/auth/callback` (for local dev) and your Vercel URL (for production).
+
+### 2. Environment Variables
+Create a `.env.local` file in the root directory and add your Supabase credentials:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Installation and Development
+```bash
+# Install dependencies
+npm install
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+# Run the development server
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🧠 Problems Encountered & Solutions
 
-## Learn More
+### 1. Persistent Session Management in Middleware
+**Problem**: Maintaining a consistent authentication state between Server Components and Client Components in the Next.js App Router can be complex, especially ensuring the session cookie is refreshed before it expires.
+**Solution**: Implemented the `@supabase/ssr` middleware pattern. This ensures that every request to the server checks for a valid session and refreshes the cookie if necessary, passing it back in the response headers to the browser.
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Real-time Synchronization Across Tabs
+**Problem**: The requirement was for the bookmark list to update in real-time without a manual page refresh when changes occur in another tab.
+**Solution**: Utilized Supabase Realtime. I set up a subscription to the `bookmarks` table in the main dashboard component. When any `INSERT` or `DELETE` event is detected, a callback triggers a re-fetch of the user's bookmarks, keeping all open tabs in sync.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 3. Securing Private User Data
+**Problem**: Ensuring that User A cannot see or modify User B's bookmarks, even if they know the bookmark ID or try to use the API directly.
+**Solution**: Leveraged PostgreSQL **Row Level Security (RLS)** in Supabase. I created policies that explicitly check if the `user_id` of a row matches the `auth.uid()` of the authenticated user. This moves the security layer from the application code directly to the database level, making it much more robust.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 4. External Asset Reliability (Google Logo)
+**Problem**: The Google logo used for the sign-in button was initially linked via external URLs which failed to load due to various reasons (CORS or broken links), leading to a poor UI experience.
+**Solution**: Replaced the external `<img>` tag with a hardcoded **inline SVG**. This ensures the logo is always bundled with the code, loads instantly, and removes any external dependency.
 
-## Deploy on Vercel
+### 5. Database Replication for Real-time
+**Problem**: Even with the correct frontend code, the bookmark list wasn't updating automatically in other tabs.
+**Solution**: Discovered that Supabase requires tables to be explicitly added to the `supabase_realtime` publication via the dashboard or SQL commands (`ALTER PUBLICATION`). Enabling this "Replication" setting allowed the database to broadcast changes to all active listeners.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+Built as part of a 72-hour technical challenge.
