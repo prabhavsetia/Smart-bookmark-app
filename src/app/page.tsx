@@ -233,7 +233,7 @@ export default function Home() {
                   </div>
                   <button
                     onClick={() => deleteBookmark(bookmark.id)}
-                    className="p-3 text-neutral-300 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100 border border-transparent hover:border-red-100"
+                    className="p-3 text-neutral-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all sm:opacity-0 group-hover:opacity-100 border border-transparent hover:border-red-100 flex-shrink-0"
                     title="Delete bookmark"
                   >
                     <Trash2 className="w-5 h-5" />
