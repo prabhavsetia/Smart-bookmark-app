@@ -217,17 +217,19 @@ export default function Home() {
               bookmarks.map((bookmark) => (
                 <div
                   key={bookmark.id}
-                  className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-sm flex items-center justify-between group hover:border-red-200 hover:shadow-md transition-all duration-300"
+                  className="bg-white p-4 sm:p-5 rounded-2xl border border-neutral-200 shadow-sm flex items-center justify-between group hover:border-red-200 hover:shadow-md transition-all duration-300 w-full overflow-hidden"
                 >
-                  <div className="flex-1 min-w-0 mr-6">
-                    <h3 className="font-bold text-xl text-neutral-900 truncate leading-tight">{bookmark.title}</h3>
+                  <div className="flex-1 min-w-0 mr-4 overflow-hidden">
+                    <h3 className="font-bold text-lg sm:text-xl text-neutral-900 truncate leading-tight w-full" title={bookmark.title}>
+                      {bookmark.title}
+                    </h3>
                     <a
                       href={bookmark.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-base text-red-500 hover:text-red-600 font-medium flex items-center mt-1.5 transition-colors group/link"
+                      className="text-sm sm:text-base text-red-500 hover:text-red-600 font-medium flex items-center mt-1.5 transition-colors group/link w-full overflow-hidden"
                     >
-                      <span className="truncate max-w-[90%]">{bookmark.url.replace(/^https?:\/\//, '')}</span>
+                      <span className="truncate flex-1 min-w-0">{bookmark.url.replace(/^https?:\/\//, '')}</span>
                       <ExternalLink className="w-4 h-4 ml-2 opacity-0 group-hover/link:opacity-100 transition-opacity flex-shrink-0" />
                     </a>
                   </div>
