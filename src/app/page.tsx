@@ -1,5 +1,6 @@
 'use client'
 
+// Forced redeploy to clear stale Vercel cache
 import { createClient } from '@/utils/supabase/client'
 import { Bookmark as BookmarkIcon, Plus, Trash2, LogOut, ExternalLink, RefreshCw } from 'lucide-react'
 import { useEffect, useState, useTransition } from 'react'

@@ -3,7 +3,7 @@
 A private, real-time bookmark manager built with Next.js, Supabase, and Tailwind CSS.
 
 ## 🚀 Live Demo
-[Insert your Vercel URL here after deployment]
+[https://your-app-name.vercel.app](https://your-app-name.vercel.app)
 
 ## ✨ Features
 - **Google OAuth Only**: Simple and secure login using Google.
