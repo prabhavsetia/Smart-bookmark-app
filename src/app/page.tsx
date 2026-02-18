@@ -130,24 +130,26 @@ export default function Home() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <RefreshCw className="w-8 h-8 animate-spin text-blue-600" />
+        <RefreshCw className="w-8 h-8 animate-spin text-red-600" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-12">
-      <nav className="bg-white shadow-sm border-b sticky top-0 z-10">
-        <div className="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <BookmarkIcon className="w-6 h-6 text-blue-600" />
-            <span className="font-bold text-xl tracking-tight">Smart Bookmark</span>
+    <div className="min-h-screen bg-neutral-50 pb-20">
+      <nav className="bg-white border-b border-neutral-200 sticky top-0 z-10">
+        <div className="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-red-600 rounded-lg">
+              <BookmarkIcon className="w-5 h-5 text-white" />
+            </div>
+            <span className="font-extrabold text-2xl tracking-tighter text-neutral-900 italic">SMART BOOKMARK</span>
           </div>
-          <div className="flex items-center space-x-4">
-            <span className="text-sm text-gray-500 hidden sm:inline">{user?.email}</span>
+          <div className="flex items-center space-x-5">
+            <span className="text-sm font-medium text-neutral-500 hidden sm:inline">{user?.email}</span>
             <button
               onClick={signOut}
-              className="p-2 text-gray-500 hover:text-red-600 transition-colors rounded-full hover:bg-red-50"
+              className="p-2.5 text-neutral-400 hover:text-red-600 transition-all rounded-xl hover:bg-red-50 border border-transparent hover:border-red-100"
               title="Sign out"
             >
               <LogOut className="w-5 h-5" />
@@ -156,32 +158,40 @@ export default function Home() {
         </div>
       </nav>
 
-      <main className="max-w-4xl mx-auto px-4 mt-8">
-        <section className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 mb-8">
-          <h2 className="text-lg font-semibold mb-4 flex items-center">
-            <Plus className="w-5 h-5 mr-1 text-blue-600" />
-            Add New Bookmark
+      <main className="max-w-4xl mx-auto px-6 mt-10">
+        <section className="bg-white p-8 rounded-2xl border border-neutral-200 shadow-sm mb-10 transition-all hover:shadow-md">
+          <h2 className="text-xl font-bold mb-6 flex items-center text-neutral-800">
+            <div className="p-1.5 bg-red-50 rounded-md mr-2">
+              <Plus className="w-5 h-5 text-red-600" />
+            </div>
+            New Bookmark
           </h2>
-          <form onSubmit={addBookmark} className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <input
-              type="text"
-              placeholder="Title (e.g., Google)"
-              value={newTitle}
-              onChange={(e) => setNewTitle(e.target.value)}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-              required
-            />
-            <input
-              type="url"
-              placeholder="URL (e.g., https://google.com)"
-              value={newUrl}
-              onChange={(e) => setNewUrl(e.target.value)}
-              className="px-4 py-2 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
-              required
-            />
+          <form onSubmit={addBookmark} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-neutral-400 uppercase tracking-widest ml-1">Title</label>
+              <input
+                type="text"
+                placeholder="e.g., Google"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+                className="w-full px-5 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-4 focus:ring-red-50 focus:border-red-500 outline-none transition-all font-medium text-neutral-900 placeholder:text-neutral-300"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-neutral-400 uppercase tracking-widest ml-1">URL</label>
+              <input
+                type="url"
+                placeholder="https://example.com"
+                value={newUrl}
+                onChange={(e) => setNewUrl(e.target.value)}
+                className="w-full px-5 py-3.5 bg-neutral-50 border border-neutral-200 rounded-xl focus:ring-4 focus:ring-red-50 focus:border-red-500 outline-none transition-all font-medium text-neutral-900 placeholder:text-neutral-300"
+                required
+              />
+            </div>
             <button
               type="submit"
-              className="md:col-span-2 bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-colors shadow-sm"
+              className="md:col-span-2 bg-red-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-red-700 transition-all shadow-lg shadow-red-100 active:scale-[0.99] mt-2"
             >
               Save Bookmark
             </button>
@@ -189,38 +199,41 @@ export default function Home() {
         </section>
 
         <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Your Bookmarks</h2>
-            <span className="text-sm text-gray-500 bg-gray-200 px-2 py-0.5 rounded-full">{bookmarks.length}</span>
+          <div className="flex items-center justify-between mb-6 px-1">
+            <h2 className="text-xl font-bold text-neutral-800">Your Collection</h2>
+            <span className="text-sm font-bold text-red-600 bg-red-50 px-3 py-1 rounded-full">{bookmarks.length} Items</span>
           </div>
 
-          <div className="space-y-4">
+          <div className="grid gap-4">
             {bookmarks.length === 0 ? (
-              <div className="text-center py-12 bg-white rounded-xl border-2 border-dashed border-gray-200">
-                <BookmarkIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-                <p className="text-gray-500 font-medium">No bookmarks yet. Start adding some!</p>
+              <div className="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-neutral-200">
+                <div className="bg-neutral-50 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <BookmarkIcon className="w-8 h-8 text-neutral-300" />
+                </div>
+                <p className="text-neutral-400 font-bold text-lg">Your library is empty</p>
+                <p className="text-neutral-300 text-sm mt-1">Add your first bookmark above</p>
               </div>
             ) : (
               bookmarks.map((bookmark) => (
                 <div
                   key={bookmark.id}
-                  className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex items-center justify-between group hover:border-blue-200 transition-colors"
+                  className="bg-white p-5 rounded-2xl border border-neutral-200 shadow-sm flex items-center justify-between group hover:border-red-200 hover:shadow-md transition-all duration-300"
                 >
-                  <div className="flex-1 min-w-0 mr-4">
-                    <h3 className="font-semibold text-gray-900 truncate">{bookmark.title}</h3>
+                  <div className="flex-1 min-w-0 mr-6">
+                    <h3 className="font-bold text-xl text-neutral-900 truncate leading-tight">{bookmark.title}</h3>
                     <a
                       href={bookmark.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-sm text-blue-500 hover:underline flex items-center mt-0.5 truncate"
+                      className="text-base text-red-500 hover:text-red-600 font-medium flex items-center mt-1.5 transition-colors group/link"
                     >
-                      {bookmark.url}
-                      <ExternalLink className="w-3 h-3 ml-1 inline-block" />
+                      <span className="truncate max-w-[90%]">{bookmark.url.replace(/^https?:\/\//, '')}</span>
+                      <ExternalLink className="w-4 h-4 ml-2 opacity-0 group-hover/link:opacity-100 transition-opacity flex-shrink-0" />
                     </a>
                   </div>
                   <button
                     onClick={() => deleteBookmark(bookmark.id)}
-                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all opacity-0 group-hover:opacity-100"
+                    className="p-3 text-neutral-300 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all opacity-0 group-hover:opacity-100 border border-transparent hover:border-red-100"
                     title="Delete bookmark"
                   >
                     <Trash2 className="w-5 h-5" />
